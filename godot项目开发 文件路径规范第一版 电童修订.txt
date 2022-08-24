@@ -1,0 +1,56 @@
+2022 小沙盒工作室提出
+第一次修订：2022/8/24
+电童 协助修订: 2022/8/24
+1.对于xxx场景
+2.对于封装的可复用对象场景都放在objects目录下面
+
+目录结构：
+----/ 根目录
+|--/assets 存放原始素材
+|--/assets/icon 存放图标
+|--/assets/2D 存放2D素材
+|--/assets/3D 存放3D素材
+|--/assets/audio 存放音频
+|--/assets/audio/music 存放音乐
+|--/assets/audio/sounds 存放音效
+|--/assets/audio/buses 存放音频总线
+
+在/assets/2D和/assets/3D路径下：
+/textures 存放2D/3D材质
+/perfabs 存放一些非对象场景的res文件
+/mesh 存放2D/3D的Mesh文件
+/model 存放3D建模文件
+/fonts 存放字体文件，对于装有TextureFont插件的工程，亦可将字体源图像与字体一并放入本目录下
+
+|--/objects 存放封装好的对象场景和组件对象场景
+|--/objects/2D
+|--/objects/3D
+|--/objects/UI
+
+在 /objects/2D和/objects/3D目录下
+/components 存放对象场景的组件（节点）对象场景
+/packs或/instances 存放对象场景
+
+|--/scenes 存放单独的房间场景（即不是用于封装的独立场景)
+|--/scene/intro 存放引导界面
+|--/scene/main_menu 存放主菜单
+|--/scene/levels 存放关卡
+
+|--/scripts 存放脚本
+|--/scripts/_classes 存放类脚本，在Godot4.0中推荐将该文件夹命名为@classes
+|--/scripts/_utils 存放可复用的通用（工具）脚本
+|--/scripts/objects 存放对象场景和对象组件场景的脚本，子目录同/objects目录的子目录，且其脚本与对应目录下的对应场景相对应
+|--/scripts/scenes 存放房间场景的脚本，子目录同/scenes目录的子目录，且其脚本与对应目录下的对应场景相对应
+
+|--/shaders 存放着色器脚本
+
+|--/singletons 存放全局物件
+|--/singletons/objects 存放单例对象场景
+|--/singletons/scripts 存放单例脚本或单例对象场景的脚本
+
+关于场景、脚本命名
+1. 所有非单例且非主场景的场景、脚本均采用全小写+下划线命名法（snake_case，如左），所有单例场景、脚本均以词首大写无空格命名法命名（PascalCase，如左）
+2. 对于封装的可复用对象场景，在保存为场景时推荐将其后缀名更改为res或scn以与房间场景进行区分
+3. 接（2），故此，建议所有对象场景统一采用res或scn后缀，所有房间场景（包括主场景）用tscn后缀，如需上传至git开源，出于安全考虑，可全部以tscn为后缀名，并加以前缀（如obj_,scn_等）来表示
+4. 主场景建议或必须用Main.tscn来表示
+5. 与对象场景紧密有关的脚本统一与该对象场景同名，除此以外可自行考虑其他命名
