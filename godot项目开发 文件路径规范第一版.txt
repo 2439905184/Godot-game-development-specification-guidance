@@ -1,0 +1,23 @@
+2022 小沙盒工作室提出
+第一次修订：2022/8/24
+1.对于xxx场景
+2.对于封装的可复用场景都放在objects目录下面
+
+目录结构：
+----/ 根目录
+|--/assets 存放原始素材
+|--/assets/2D 存放2D素材
+|--/assets/3D 存放3D素材
+|--/assets/bgm 存放bgm
+|--/assets/se 存放短音效
+
+|--/objects 存放封装好的场景组件和脚本
+|--/objects/2D
+|--/objects/3D
+
+|--/scenes 存放单独的场景（即不是用于封装的独立场景)
+|--/scense/level2 存放第二关
+|--/scense/level2/script 存放第二关的独立脚本
+
+|--/scripts 存放一般脚本，和独立场景有关的脚本
+|--/scripts/utils 存放可复用的通用工具脚本
