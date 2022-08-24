@@ -1,0 +1,187 @@
+Godot GDScript 本土化代码编写规范（含3.x，4.x）
+原作者：Godot Doc
+修订人：电童
+适用范围：Godot GDScript
+
+声明：
+本规范为Godot Doc上规范的本土规范化，并不具权威性，仅供参考
+
+以下为GDScript代码的基本架构，主要来自Godot Doc，部分有所改动，仅供参考
+（一定一定一定要注意空行和缩进的使用！）
+
+===============
+3.x
+# 注释与注释符号#需空一格，否则默认视为禁用代码段
+# 用途解释型注释位于脚本最开头
+tool # 工具脚本提示，使脚本可在编辑器内运行，只能位于脚本开头，否则会报错。如不希望在脚本内运行，请去掉该关键字
+extends Node2D
+class_name MyClass, "res://assets/icons/icon.png" #这样写更能体现出类与类之间的继承关系，上面为父类，下面为子类（本类），符合人类逻辑
+
+signal a # 信号位于类命名下方，且均以snake_case命名
+signal b(value)
+
+enum MyEnum { #类名、枚举统一采用PascalCase命名
+	VALUE1, # 枚举常数全大写
+	VALUE2,
+	VALUE3,
+	...
+	VALUE_N
+}
+
+const THIS_IS_A_CONSTANT:float = 30.0 # 同枚举常数，常量名也要全大写
+
+export var t: = null # 所有变量均采用snake_case命名
+export(int) var a:int = 0 # 导出变量位于const下方，加(int)是为了限制输入的类型，a:int是为了同时限制输入时的类型和调用时的类型，可视情况需要添加
+export(float) var f:float = 0.0 # 如果这里直接写0也没有问题，但是在编辑器界面里输入后会自动化整
+export(Array, int) var i:Array = [0] # 如果需要限制导出的数组类型，请如此写，否则不推荐写为export var a:Array = [0]
+
+var some_values = null #非导出变量位于导出变量下方
+var a:int = 1
+var b:Object = null setget set_object,get_object # setget后面的set函数和get函数推荐分别以set_，get_/is_开头
+var _c:float = PI #私有变量位于公有变量下方，可视情况选择空行或不空行
+
+onready var values: = null # 公有载入变量位于非导出变量下方
+onready var _private:float = 3.14 # 私有载入变量位于公有载入变量，可视情况选择空行或不空行
+
+onready var node:Node2D = null # 载入节点变量位于载入变量下方，与公有载入变量空行声明
+
+
+func _init() -> void:
+	# 所有函数（包括后面的信号函数）统一以snake_case命名，且除信号函数外必须以 -> XXX 来声明返回类型。如不返回类型，请将XXX改为void
+	# 建议在 编辑器设置 —— 补全 中开启“添加类型提示”选项
+	pass
+
+func _ready() -> void:
+	# 虚函数位于载入节点变量下方，与变量声明代码段空两行行文
+	# 虚函数的排布按下列行的先后顺序排定
+	# 高级导出：_get_proper_list()
+	# 载入型虚函数的排布顺序：_init() _enter_tree() _exit_tree() _ready()
+	# 通讯型虚函数的排布顺序：_notification() _set() _get()
+	# 打印型虚函数的排布顺序：_get_configuration_warning()
+	# 绘制型虚函数的排布顺序：_draw()
+	# 帧步型虚函数的排布顺序：_process(delta:float) _physics_process(delta:float)
+	# 操作型虚函数的排布顺序：_input() _unhandled_input() _unhandled_key_input()
+	pass
+
+
+func _my_private_function() -> void:
+	# 私有自定义函数位于虚函数下方，与虚函数段空两行行文
+	pass
+
+
+func my_public_function() -> void:
+	# 公有自定义函数位于私有自定义函数下方，与私有自定义函数段空两行行文
+
+
+func set_object(new:Object) -> void:
+	# set get函数段位于公有自定义函数下方，与公有自定义函数段空两行行文
+	b = new
+
+func get_object() -> Object:
+	# get函数紧位于对应的set函数下方，与set函数空一行行文
+	return b
+
+
+func _on_hooked():
+	# 信号函数位于set get函数段下方，且与之空两行行文
+	# 信号函数统一以 _on_ + 动词现在分词或过去分词（更多的是后者）开头
+	# 信号函数可以不用声明返回类型，因为他们大部分都无法返回值
+	pass
+
+func _Hooked_me():
+	# 也可以以下划线开头，第一个单词首字母大写来表示信号函数
+	# 当然，由于信号可以连接到任意函数上，这里的信号函数都是指默认用信号调用的函数
+	pass
+
+
+===============
+4.x
+# 注释与注释符号#需空一格，否则默认视为禁用代码段
+# 用途解释型注释位于脚本最开头
+@tool # 工具脚本提示，使脚本可在编辑器内运行，只能位于脚本开头，否则会报错。如不希望在脚本内运行，请去掉该注解@icon("res://assets/icons/icon.png") # @icon注解紧邻@tool，位于其下方
+extends Node2D
+class_name MyClass #这样写更能体现出类与类之间的继承关系，上面为父类，下面为子类（本类），符合人类逻辑
+
+enum MyEnum { #类名、枚举统一采用PascalCase命名
+	VALUE1, # 枚举常数全大写
+	VALUE2,
+	VALUE3,
+	...
+	VALUE_N
+}
+
+const THIS_IS_A_CONSTANT:float = 30.0 # 同枚举常数，常量名也要全大写
+
+@export_category("My category") # 导出变量第一行均应对下面的变量进行分组，组名按正常英文规范书写，但首词的首字母需大写
+@export var t: = null # 所有变量均采用snake_case命名，且建议声明好变量类型
+@export var a:int = 0 # 导出变量位于const下方
+@export var f:float = 0.0 # 如果这里直接写0也没有问题，但是在编辑器界面里输入后会自动化整
+@export var i:Array[int] = [0] # 如果需要限制导出的数组类型，请如此写，否则不推荐写为export var a:Array = [0]
+
+var some_values = null #非导出变量位于导出变量下方
+var a:int = 1
+var b:Object = null: # set get类型需空行行文
+	set = set_object,
+	get = get_object # setget后面的set函数和get函数推荐分别以set_，get_/is_开头
+var _c:float = PI: #私有变量位于公有变量下方，可视情况选择空行或不空行
+	set(i):
+		c = i
+	get:
+		return c # 4.0版本的setget方法的结构可将变量声明视作函数声明处理
+
+@onready var values: = null # 公有载入变量位于非导出变量下方
+@onready var _private:float = 3.14 # 私有载入变量位于公有载入变量，可视情况选择空行或不空行
+
+@onready var node:Node2D = null # 载入节点变量位于载入变量下方，与公有载入变量空行声明
+
+
+signal a # 信号位于载入节点变量下方，且均以snake_case命名，与载入节点变量空两行行文
+signal b(value:MyEnum) # 由于4.x支持枚举作为类，如果将信号声明放置于枚举声明前则会导致报错，故4.0的信号应按此声明
+
+
+func _init() -> void:
+	# 所有函数（包括后面的信号函数）统一以snake_case命名，且除信号函数外必须以 -> XXX 来声明返回类型。如不返回类型，请将XXX改为void
+	# 建议在 编辑器设置 —— 补全 中开启“添加类型提示”选项
+	pass
+
+func _ready() -> void:
+	# 虚函数位于载入节点变量下方，与变量声明代码段空两行行文
+	# 虚函数的排布按下列行的先后顺序排定
+	# 高级导出：_get_proper_list()
+	# 载入型虚函数的排布顺序：_init() _enter_tree() _exit_tree() _ready()
+	# 通讯型虚函数的排布顺序：_notification() _set() _get()
+	# 打印型虚函数的排布顺序：_get_configuration_warning()
+	# 绘制型虚函数的排布顺序：_draw()
+	# 帧步型虚函数的排布顺序：_process(delta:float) _physics_process(delta:float)
+	# 操作型虚函数的排布顺序：_input() _unhandled_input() _unhandled_key_input()
+	pass
+
+
+func _my_private_function() -> void:
+	# 私有自定义函数位于虚函数下方，与虚函数段空两行行文
+	pass
+
+
+func my_public_function() -> void:
+	# 公有自定义函数位于私有自定义函数下方，与私有自定义函数段空两行行文
+
+
+func set_object(new:Object) -> void:
+	# set get函数段位于公有自定义函数下方，与公有自定义函数段空两行行文
+	b = new
+
+func get_object() -> Object:
+	# get函数紧位于对应的set函数下方，与set函数空一行行文
+	return b
+
+
+func _on_hooked():
+	# 信号函数位于set get函数段下方，且与之空两行行文
+	# 信号函数统一以 _on_ + 动词现在分词或过去分词（更多的是后者）开头
+	# 信号函数可以不用声明返回类型，因为他们大部分都无法返回值
+	pass
+
+func _Hooked_me():
+	# 也可以以下划线开头，第一个单词首字母大写来表示信号函数
+	# 当然，由于信号可以连接到任意函数上，这里的信号函数都是指默认用信号调用的函数
+	pass
